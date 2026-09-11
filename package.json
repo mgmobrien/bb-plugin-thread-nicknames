@@ -1,0 +1,35 @@
+{
+  "name": "bb-plugin-thread-nicknames",
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "bb": ">=0.42",
+    "bbPluginSdk": ">=0.4.47"
+  },
+  "bb": {
+    "name": "Thread nicknames",
+    "description": "Adds persistent unique numbers to thread titles, such as @27.",
+    "server": "./server.ts",
+    "skills": [],
+    "branding": {
+      "icon": "ListTodo"
+    }
+  },
+  "devDependencies": {
+    "@get-bb/plugin-sdk": "0.4.47",
+    "typescript": "^5.7.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/better-sqlite3": "^7.6.12",
+    "better-sqlite3": "^12.0.0",
+    "react": "^19.0.0",
+    "zod": "^4.3.6",
+    "hono": "^4.11.9",
+    "cron-parser": "^5.5.0"
+  },
+  "scripts": {
+    "build": "bb plugin build",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test server.test.ts"
+  }
+}

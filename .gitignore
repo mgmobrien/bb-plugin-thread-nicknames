@@ -1,7 +1,9 @@
-node_modules
-dist
+node_modules/
+dist/
+.claude/
+.codex/
+.bb/
 .DS_Store
+*.log
 .env
 .env.*
-*.db
-*.db-*

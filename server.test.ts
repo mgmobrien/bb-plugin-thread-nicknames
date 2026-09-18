@@ -84,3 +84,27 @@ test('migrates old codes once, reserves deleted numbers, and expands after 999',
     assert.equal((currentDb.prepare('SELECT number FROM thread_numbers WHERE thread_id = ?').get('thr_deleted') as {number:number}).number, 999);
   } finally { await host.harness.lifecycle.dispose(); }
 });
+
+test('sidebar list paginates, reports unavailable threads, rejects bad input, and never allocates numbers', async () => {
+  const host = createFakePluginHost({ pluginId: 'thread-nicknames', sdk: {
+    subscribe: () => () => {},
+    threads: { list: async () => [], get: async ({ threadId }) => {
+      if (threadId === 'thr_missing') throw Error('temporarily unavailable');
+      return makeThreadResponse({ id: threadId, title: 'A numbered thread' });
+    } },
+  } });
+  await plugin(host.bb);
+  try {
+    const db = host.bb.storage.database();
+    const insert = db.prepare('INSERT INTO thread_numbers(thread_id) VALUES (?)');
+    for (let i = 0; i < 101; i++) insert.run(i === 0 ? 'thr_missing' : `thr_fixture_${i}`);
+    const before = db.prepare('SELECT * FROM thread_numbers').all();
+    const first = await host.harness.callRpc('list', { offset: 0 }) as any;
+    assert.equal(first.rows.length, 100); assert.equal(first.hasMore, true);
+    assert.equal(first.rows[0].available, false); assert.equal(first.rows[0].code, '@1');
+    const last = await host.harness.callRpc('list', { offset: 100 }) as any;
+    assert.equal(last.rows.length, 1); assert.equal(last.hasMore, false); assert.equal(last.rows[0].code, '@101');
+    await assert.rejects(host.harness.callRpc('list', { offset: -1 }));
+    assert.deepEqual(db.prepare('SELECT * FROM thread_numbers').all(), before);
+  } finally { await host.harness.dispose(); }
+});

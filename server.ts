@@ -1,4 +1,12 @@
-import type { BbPluginApi } from '@get-bb/plugin-sdk';
+import { defineRpcContract, type BbPluginApi } from '@get-bb/plugin-sdk';
+import { z } from 'zod';
+
+export const rpcContract = defineRpcContract({
+  list: {
+    input: z.object({ offset: z.number().int().min(0).max(1000000) }),
+    output: z.object({ rows: z.array(z.object({ threadId: z.string(), code: z.string(), title: z.string(), available: z.boolean() })), hasMore: z.boolean() }),
+  },
+});
 
 type Thread = Awaited<ReturnType<BbPluginApi['sdk']['threads']['get']>>;
 
@@ -87,6 +95,20 @@ export default async function plugin(bb: BbPluginApi) {
     if (event.state === 'connected' && event.reconnected) void reconcile().catch(e => bb.log.warn(String(e)));
   }});
   bb.background.service('reconcile', { async start() { await reconcile(); } });
+  bb.rpc.register(rpcContract, {
+    async list({ offset }) {
+      const records = db.prepare("SELECT thread_id, '@' || number AS code FROM thread_numbers ORDER BY number LIMIT 101 OFFSET ?").all(offset) as { thread_id: string; code: string }[];
+      const rows = await Promise.all(records.slice(0, 100).map(async row => {
+        try {
+          const thread = await bb.sdk.threads.get({ threadId: row.thread_id });
+          return { threadId: row.thread_id, code: row.code, title: thread.title ?? thread.titleFallback ?? 'Untitled', available: thread.deletedAt === null };
+        } catch {
+          return { threadId: row.thread_id, code: row.code, title: 'Thread details unavailable', available: false };
+        }
+      }));
+      return { rows, hasMore: records.length > 100 };
+    },
+  });
   bb.cli.register({
     name: 'thread-nicknames', summary: 'Inspect automatic thread nicknames or prefix a specific thread.',
     async run(argv, ctx) {

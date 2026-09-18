@@ -1,6 +1,6 @@
 {
   "name": "bb-plugin-thread-nicknames",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "engines": {
     "bb": ">=0.42",
@@ -13,7 +13,8 @@
     "skills": [],
     "branding": {
       "icon": "ListTodo"
-    }
+    },
+    "app": "./app.tsx"
   },
   "devDependencies": {
     "@get-bb/plugin-sdk": "0.4.47",

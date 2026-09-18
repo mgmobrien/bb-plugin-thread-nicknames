@@ -4,7 +4,7 @@ Give bb threads persistent, sequential numbers in their titles: `@27 Fix login`.
 
 These numbers belong to **threads**, not pane positions. Moving a thread between panes does not change its number.
 
-## Behaviour
+## Behavior
 
 - New threads receive a unique number, retained across plugin reloads and title changes.
 - Empty titles are left alone while bb generates metadata. The plugin can use the fallback title when the thread finishes or the fallback is short.
@@ -28,6 +28,10 @@ bb plugin install .
 ```
 
 Keep the source directory at a durable location. The plugin’s package name, `bb-plugin-thread-nicknames`, determines its bb identity; renaming it would attach to a different plugin data directory.
+
+## Sidebar and Settings
+
+Open **Thread nicknames** from the sidebar or Settings → Plugins → Thread nicknames to browse saved numbers, 100 per page. Select a row to open its thread. Use **Refresh**, **Previous** and **Next** to navigate; unavailable threads are marked and cannot be opened. The list reads existing numbers without allocating new ones.
 
 ## CLI
 

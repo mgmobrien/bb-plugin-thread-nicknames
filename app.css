@@ -1,0 +1,12 @@
+[data-nicknames-page] { flex: 1; min-height: 0; overflow-y: auto; max-height: 100%; width: 100%; box-sizing: border-box; max-width: 52rem; margin: 0 auto; padding: 20px; font-size: 14px; color: var(--foreground); }
+[data-nicknames-page] p { margin: 0 0 16px; }
+[data-nicknames-controls] { display: flex; gap: 12px; align-items: center; margin: 16px 0; }
+[data-nicknames-page] button { border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; cursor: pointer; background: var(--background); color: inherit; }
+[data-nicknames-page] button:hover { background: var(--accent); }
+[data-nicknames-page] button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+[data-nicknames-page] button:disabled { opacity: .5; cursor: default; }
+[data-nicknames-page] ul { list-style: none; padding: 0; margin: 0; }
+[data-nicknames-page] li button { width: 100%; display: flex; text-align: left; align-items: center; gap: 12px; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding: 10px; }
+[data-nicknames-page] li strong { min-width: 3rem; }
+[data-nicknames-page] li span { flex: 1; }
+[data-nicknames-note] { color: var(--muted-foreground); font-size: 12px; }

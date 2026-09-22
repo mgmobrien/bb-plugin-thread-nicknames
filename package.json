@@ -1,6 +1,6 @@
 {
   "name": "bb-plugin-thread-nicknames",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "engines": {
     "bb": ">=0.42",
@@ -16,6 +16,9 @@
     },
     "app": "./app.tsx"
   },
+  "dependencies": {
+    "zod": "^4.3.6"
+  },
   "devDependencies": {
     "@get-bb/plugin-sdk": "0.4.47",
     "typescript": "^5.7.0",
@@ -24,7 +27,6 @@
     "@types/better-sqlite3": "^7.6.12",
     "better-sqlite3": "^12.0.0",
     "react": "^19.0.0",
-    "zod": "^4.3.6",
     "hono": "^4.11.9",
     "cron-parser": "^5.5.0"
   },
